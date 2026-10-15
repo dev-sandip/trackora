@@ -1,37 +1,39 @@
 {
-  "name": "trackora",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "concurrently \"pnpm --filter @app/api dev\" \"pnpm --filter @app/web dev\"",
-    "build": "pnpm -r build",
-    "typecheck": "pnpm -r typecheck",
-    "check": "biome check .",
-    "check:fix": "biome check --write .",
-    "format": "biome format --write .",
-    "lint": "biome lint .",
-    "lint:fix": "biome lint --write .",
-    "knip": "knip",
-    "db:generate": "pnpm --filter @app/core db:generate",
-    "db:migrate": "pnpm --filter @app/core db:migrate",
-    "db:push": "pnpm --filter @app/core db:push",
-    "db:studio": "pnpm --filter @app/core db:studio"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "12.11.2",
-      "onFail": "download"
-    }
-  },
-  "packageManager": "pnpm@12.11.2",
-  "type": "module",
-  "devDependencies": {
-    "@biomejs/biome": "2.5.15",
-    "concurrently": "^10.0.6"
-  }
+	"name": "trackora",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "concurrently \"pnpm --filter @app/api start:dev\" \"pnpm --filter @app/web dev\"",
+		"api:dev": "pnpm --filter @app/api start:dev",
+		"web:dev": "pnpm --filter @app/web dev",
+		"build": "pnpm -r build",
+		"typecheck": "pnpm -r typecheck",
+		"check": "biome check .",
+		"check:fix": "biome check --write .",
+		"format": "biome format --write .",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint --write .",
+		"knip": "knip",
+		"db:generate": "pnpm --filter @app/core db:generate",
+		"db:migrate": "pnpm --filter @app/core db:migrate",
+		"db:push": "pnpm --filter @app/core db:push",
+		"db:studio": "pnpm --filter @app/core db:studio"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devEngines": {
+		"packageManager": {
+			"name": "pnpm",
+			"version": "12.11.2",
+			"onFail": "download"
+		}
+	},
+	"packageManager": "pnpm@12.11.2",
+	"type": "module",
+	"devDependencies": {
+		"@biomejs/biome": "2.5.15",
+		"concurrently": "^10.0.6"
+	}
 }

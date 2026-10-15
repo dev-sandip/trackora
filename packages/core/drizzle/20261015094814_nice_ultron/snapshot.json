@@ -1,681 +1,657 @@
 {
-  "version": "8",
-  "dialect": "postgres",
-  "id": "7f4cbfd4-c73a-4eac-8382-52d29ac894ae",
-  "prevIds": [
-    "00000000-0000-0000-0000-000000000000"
-  ],
-  "ddl": [
-    {
-      "values": [
-        "online",
-        "offline",
-        "busy",
-        "away"
-      ],
-      "name": "agent_status",
-      "entityType": "enums",
-      "schema": "public"
-    },
-    {
-      "values": [
-        "user",
-        "admin"
-      ],
-      "name": "user_role",
-      "entityType": "enums",
-      "schema": "public"
-    },
-    {
-      "isRlsEnabled": false,
-      "name": "users",
-      "entityType": "tables",
-      "schema": "public"
-    },
-    {
-      "isRlsEnabled": false,
-      "name": "sessions",
-      "entityType": "tables",
-      "schema": "public"
-    },
-    {
-      "isRlsEnabled": false,
-      "name": "agents",
-      "entityType": "tables",
-      "schema": "public"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "users"
-    },
-    {
-      "type": "varchar(320)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "email",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "users"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "password_hash",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "users"
-    },
-    {
-      "type": "varchar(255)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "name",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "users"
-    },
-    {
-      "type": "user_role",
-      "typeSchema": "public",
-      "notNull": true,
-      "dimensions": 0,
-      "default": "'user'",
-      "generated": null,
-      "identity": null,
-      "name": "role",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "users"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "avatar_url",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "users"
-    },
-    {
-      "type": "boolean",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "true",
-      "generated": null,
-      "identity": null,
-      "name": "is_active",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "users"
-    },
-    {
-      "type": "timestamp(3) with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "users"
-    },
-    {
-      "type": "timestamp(3) with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "updated_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "users"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "sessions"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "user_id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "sessions"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "token",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "sessions"
-    },
-    {
-      "type": "timestamp(3) with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "expires_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "sessions"
-    },
-    {
-      "type": "timestamp(3) with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "sessions"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "user_id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "type": "varchar(255)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "name",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "type": "agent_status",
-      "typeSchema": "public",
-      "notNull": true,
-      "dimensions": 0,
-      "default": "'offline'",
-      "generated": null,
-      "identity": null,
-      "name": "status",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "type": "double precision",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "location_lat",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "type": "double precision",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "location_lng",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "location_address",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "type": "double precision",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "location_accuracy",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "type": "timestamp(3) with time zone",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "location_timestamp",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "type": "timestamp(3) with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "last_seen",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "type": "jsonb",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "metadata",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "type": "timestamp(3) with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "type": "timestamp(3) with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "updated_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "email",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": true,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "users_email_uidx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "users"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "role",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "users_role_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "users"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "is_active",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "users_is_active_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "users"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "token",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": true,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "sessions_token_uidx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "sessions"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "user_id",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "sessions_user_id_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "sessions"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "expires_at",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "sessions_expires_at_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "sessions"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "user_id",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "agents_user_id_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "status",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "agents_status_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "last_seen",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "agents_last_seen_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "user_id",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        },
-        {
-          "value": "status",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "agents_user_status_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        "user_id"
-      ],
-      "schemaTo": "public",
-      "tableTo": "users",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "CASCADE",
-      "name": "sessions_user_id_users_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "sessions"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        "user_id"
-      ],
-      "schemaTo": "public",
-      "tableTo": "users",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "CASCADE",
-      "name": "agents_user_id_users_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "agents"
-    },
-    {
-      "columns": [
-        "id"
-      ],
-      "nameExplicit": false,
-      "name": "users_pkey",
-      "schema": "public",
-      "table": "users",
-      "entityType": "pks"
-    },
-    {
-      "columns": [
-        "id"
-      ],
-      "nameExplicit": false,
-      "name": "sessions_pkey",
-      "schema": "public",
-      "table": "sessions",
-      "entityType": "pks"
-    },
-    {
-      "columns": [
-        "id"
-      ],
-      "nameExplicit": false,
-      "name": "agents_pkey",
-      "schema": "public",
-      "table": "agents",
-      "entityType": "pks"
-    }
-  ],
-  "renames": []
+	"version": "8",
+	"dialect": "postgres",
+	"id": "7f4cbfd4-c73a-4eac-8382-52d29ac894ae",
+	"prevIds": ["00000000-0000-0000-0000-000000000000"],
+	"ddl": [
+		{
+			"values": ["online", "offline", "busy", "away"],
+			"name": "agent_status",
+			"entityType": "enums",
+			"schema": "public"
+		},
+		{
+			"values": ["user", "admin"],
+			"name": "user_role",
+			"entityType": "enums",
+			"schema": "public"
+		},
+		{
+			"isRlsEnabled": false,
+			"name": "users",
+			"entityType": "tables",
+			"schema": "public"
+		},
+		{
+			"isRlsEnabled": false,
+			"name": "sessions",
+			"entityType": "tables",
+			"schema": "public"
+		},
+		{
+			"isRlsEnabled": false,
+			"name": "agents",
+			"entityType": "tables",
+			"schema": "public"
+		},
+		{
+			"type": "uuid",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": "gen_random_uuid()",
+			"generated": null,
+			"identity": null,
+			"name": "id",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "users"
+		},
+		{
+			"type": "varchar(320)",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "email",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "users"
+		},
+		{
+			"type": "text",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "password_hash",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "users"
+		},
+		{
+			"type": "varchar(255)",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "name",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "users"
+		},
+		{
+			"type": "user_role",
+			"typeSchema": "public",
+			"notNull": true,
+			"dimensions": 0,
+			"default": "'user'",
+			"generated": null,
+			"identity": null,
+			"name": "role",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "users"
+		},
+		{
+			"type": "text",
+			"typeSchema": null,
+			"notNull": false,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "avatar_url",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "users"
+		},
+		{
+			"type": "boolean",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": "true",
+			"generated": null,
+			"identity": null,
+			"name": "is_active",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "users"
+		},
+		{
+			"type": "timestamp(3) with time zone",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": "now()",
+			"generated": null,
+			"identity": null,
+			"name": "created_at",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "users"
+		},
+		{
+			"type": "timestamp(3) with time zone",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": "now()",
+			"generated": null,
+			"identity": null,
+			"name": "updated_at",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "users"
+		},
+		{
+			"type": "uuid",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": "gen_random_uuid()",
+			"generated": null,
+			"identity": null,
+			"name": "id",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "sessions"
+		},
+		{
+			"type": "uuid",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "user_id",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "sessions"
+		},
+		{
+			"type": "text",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "token",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "sessions"
+		},
+		{
+			"type": "timestamp(3) with time zone",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "expires_at",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "sessions"
+		},
+		{
+			"type": "timestamp(3) with time zone",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": "now()",
+			"generated": null,
+			"identity": null,
+			"name": "created_at",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "sessions"
+		},
+		{
+			"type": "uuid",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": "gen_random_uuid()",
+			"generated": null,
+			"identity": null,
+			"name": "id",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"type": "uuid",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "user_id",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"type": "varchar(255)",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "name",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"type": "agent_status",
+			"typeSchema": "public",
+			"notNull": true,
+			"dimensions": 0,
+			"default": "'offline'",
+			"generated": null,
+			"identity": null,
+			"name": "status",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"type": "double precision",
+			"typeSchema": null,
+			"notNull": false,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "location_lat",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"type": "double precision",
+			"typeSchema": null,
+			"notNull": false,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "location_lng",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"type": "text",
+			"typeSchema": null,
+			"notNull": false,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "location_address",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"type": "double precision",
+			"typeSchema": null,
+			"notNull": false,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "location_accuracy",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"type": "timestamp(3) with time zone",
+			"typeSchema": null,
+			"notNull": false,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "location_timestamp",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"type": "timestamp(3) with time zone",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": "now()",
+			"generated": null,
+			"identity": null,
+			"name": "last_seen",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"type": "jsonb",
+			"typeSchema": null,
+			"notNull": false,
+			"dimensions": 0,
+			"default": null,
+			"generated": null,
+			"identity": null,
+			"name": "metadata",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"type": "timestamp(3) with time zone",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": "now()",
+			"generated": null,
+			"identity": null,
+			"name": "created_at",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"type": "timestamp(3) with time zone",
+			"typeSchema": null,
+			"notNull": true,
+			"dimensions": 0,
+			"default": "now()",
+			"generated": null,
+			"identity": null,
+			"name": "updated_at",
+			"entityType": "columns",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"nameExplicit": true,
+			"columns": [
+				{
+					"value": "email",
+					"isExpression": false,
+					"asc": true,
+					"nullsFirst": false,
+					"opclass": null
+				}
+			],
+			"isUnique": true,
+			"where": null,
+			"with": "",
+			"method": "btree",
+			"concurrently": false,
+			"name": "users_email_uidx",
+			"entityType": "indexes",
+			"schema": "public",
+			"table": "users"
+		},
+		{
+			"nameExplicit": true,
+			"columns": [
+				{
+					"value": "role",
+					"isExpression": false,
+					"asc": true,
+					"nullsFirst": false,
+					"opclass": null
+				}
+			],
+			"isUnique": false,
+			"where": null,
+			"with": "",
+			"method": "btree",
+			"concurrently": false,
+			"name": "users_role_idx",
+			"entityType": "indexes",
+			"schema": "public",
+			"table": "users"
+		},
+		{
+			"nameExplicit": true,
+			"columns": [
+				{
+					"value": "is_active",
+					"isExpression": false,
+					"asc": true,
+					"nullsFirst": false,
+					"opclass": null
+				}
+			],
+			"isUnique": false,
+			"where": null,
+			"with": "",
+			"method": "btree",
+			"concurrently": false,
+			"name": "users_is_active_idx",
+			"entityType": "indexes",
+			"schema": "public",
+			"table": "users"
+		},
+		{
+			"nameExplicit": true,
+			"columns": [
+				{
+					"value": "token",
+					"isExpression": false,
+					"asc": true,
+					"nullsFirst": false,
+					"opclass": null
+				}
+			],
+			"isUnique": true,
+			"where": null,
+			"with": "",
+			"method": "btree",
+			"concurrently": false,
+			"name": "sessions_token_uidx",
+			"entityType": "indexes",
+			"schema": "public",
+			"table": "sessions"
+		},
+		{
+			"nameExplicit": true,
+			"columns": [
+				{
+					"value": "user_id",
+					"isExpression": false,
+					"asc": true,
+					"nullsFirst": false,
+					"opclass": null
+				}
+			],
+			"isUnique": false,
+			"where": null,
+			"with": "",
+			"method": "btree",
+			"concurrently": false,
+			"name": "sessions_user_id_idx",
+			"entityType": "indexes",
+			"schema": "public",
+			"table": "sessions"
+		},
+		{
+			"nameExplicit": true,
+			"columns": [
+				{
+					"value": "expires_at",
+					"isExpression": false,
+					"asc": true,
+					"nullsFirst": false,
+					"opclass": null
+				}
+			],
+			"isUnique": false,
+			"where": null,
+			"with": "",
+			"method": "btree",
+			"concurrently": false,
+			"name": "sessions_expires_at_idx",
+			"entityType": "indexes",
+			"schema": "public",
+			"table": "sessions"
+		},
+		{
+			"nameExplicit": true,
+			"columns": [
+				{
+					"value": "user_id",
+					"isExpression": false,
+					"asc": true,
+					"nullsFirst": false,
+					"opclass": null
+				}
+			],
+			"isUnique": false,
+			"where": null,
+			"with": "",
+			"method": "btree",
+			"concurrently": false,
+			"name": "agents_user_id_idx",
+			"entityType": "indexes",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"nameExplicit": true,
+			"columns": [
+				{
+					"value": "status",
+					"isExpression": false,
+					"asc": true,
+					"nullsFirst": false,
+					"opclass": null
+				}
+			],
+			"isUnique": false,
+			"where": null,
+			"with": "",
+			"method": "btree",
+			"concurrently": false,
+			"name": "agents_status_idx",
+			"entityType": "indexes",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"nameExplicit": true,
+			"columns": [
+				{
+					"value": "last_seen",
+					"isExpression": false,
+					"asc": true,
+					"nullsFirst": false,
+					"opclass": null
+				}
+			],
+			"isUnique": false,
+			"where": null,
+			"with": "",
+			"method": "btree",
+			"concurrently": false,
+			"name": "agents_last_seen_idx",
+			"entityType": "indexes",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"nameExplicit": true,
+			"columns": [
+				{
+					"value": "user_id",
+					"isExpression": false,
+					"asc": true,
+					"nullsFirst": false,
+					"opclass": null
+				},
+				{
+					"value": "status",
+					"isExpression": false,
+					"asc": true,
+					"nullsFirst": false,
+					"opclass": null
+				}
+			],
+			"isUnique": false,
+			"where": null,
+			"with": "",
+			"method": "btree",
+			"concurrently": false,
+			"name": "agents_user_status_idx",
+			"entityType": "indexes",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"nameExplicit": false,
+			"columns": ["user_id"],
+			"schemaTo": "public",
+			"tableTo": "users",
+			"columnsTo": ["id"],
+			"onUpdate": "NO ACTION",
+			"onDelete": "CASCADE",
+			"name": "sessions_user_id_users_id_fkey",
+			"entityType": "fks",
+			"schema": "public",
+			"table": "sessions"
+		},
+		{
+			"nameExplicit": false,
+			"columns": ["user_id"],
+			"schemaTo": "public",
+			"tableTo": "users",
+			"columnsTo": ["id"],
+			"onUpdate": "NO ACTION",
+			"onDelete": "CASCADE",
+			"name": "agents_user_id_users_id_fkey",
+			"entityType": "fks",
+			"schema": "public",
+			"table": "agents"
+		},
+		{
+			"columns": ["id"],
+			"nameExplicit": false,
+			"name": "users_pkey",
+			"schema": "public",
+			"table": "users",
+			"entityType": "pks"
+		},
+		{
+			"columns": ["id"],
+			"nameExplicit": false,
+			"name": "sessions_pkey",
+			"schema": "public",
+			"table": "sessions",
+			"entityType": "pks"
+		},
+		{
+			"columns": ["id"],
+			"nameExplicit": false,
+			"name": "agents_pkey",
+			"schema": "public",
+			"table": "agents",
+			"entityType": "pks"
+		}
+	],
+	"renames": []
 }
