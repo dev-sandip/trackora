@@ -1,7 +1,7 @@
 import { BaseEntity } from '../../../common/entities/base.entity.js';
 import { Column, Entity, Index } from 'typeorm';
 
-export type UserRole = 'user' | 'admin';
+export type UserRole = 'agent' | 'admin';
 
 @Entity('users')
 @Index('UQ_users_email', ['email'], { unique: true })
@@ -24,8 +24,8 @@ export class AuthEntity extends BaseEntity {
 
   @Column({
     type: 'enum',
-    enum: ['user', 'admin'],
-    default: 'user',
+    enum: ['agent', 'admin'],
+    default: 'agent',
   })
   role!: UserRole;
 
