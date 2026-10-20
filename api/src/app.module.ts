@@ -7,7 +7,6 @@ import { AuthModule } from './modules/auth/auth.module.js';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -28,7 +27,10 @@ import { AppService } from './app.service.js';
         const dataSource = new DataSource(options!);
         await dataSource.initialize();
 
-        Logger.log("Database connection established successfully 🤓.", "TypeORM");
+        Logger.log(
+          'Database connection established successfully 🤓.',
+          'TypeORM',
+        );
 
         return dataSource;
       },
