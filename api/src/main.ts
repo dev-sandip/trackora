@@ -5,6 +5,7 @@ import { HttpExceptionFilter } from '@/common/filters/http-exception.filter.js';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,8 @@ async function bootstrap(): Promise<void> {
   const NODE_ENV = configService.get<string>('NODE_ENV') ?? 'development';
   const SWAGGER_ENABLED =
     configService.get<string>('SWAGGER_ENABLED') === 'true';
+  const FRONTEND_URL =
+    configService.get<string>('FRONTEND_URL') ?? 'http://localhost:5173';
 
   app.setGlobalPrefix(API_PREFIX);
 
@@ -23,7 +26,7 @@ async function bootstrap(): Promise<void> {
     type: VersioningType.URI,
     defaultVersion: '1',
   });
-
+  app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -33,6 +36,13 @@ async function bootstrap(): Promise<void> {
   );
 
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  app.enableCors({
+    origin: FRONTEND_URL,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
 
   const swaggerEnabled = NODE_ENV !== 'production' || SWAGGER_ENABLED;
 

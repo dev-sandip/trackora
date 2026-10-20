@@ -1,85 +1,91 @@
-import { ModeToggle } from '@/components/mode-toggle'
-import { Badge } from '@/components/ui/badge'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { useAuth } from '../auth/auth-context'
+import { buttonVariants } from '../components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/react-start'
-
-const fetchPosts = createServerFn({ method: 'GET' }).handler(async () => {
-  const res = await fetch('https://jsonplaceholder.typicode.com/posts')
-  if (!res.ok) throw new Error('Failed to fetch posts')
-
-  const data = await res.json()
-  return data.slice(0, 5)
-})
-
-const postsQueryOptions = queryOptions({
-  queryKey: ['posts'],
-  queryFn: () => fetchPosts(),
-})
+} from '../components/ui/card'
 
 export const Route = createFileRoute('/')({
-  loader: async ({ context }) => {
-    await context.queryClient.query(postsQueryOptions)
-  },
-  component: Home,
+  component: HomePage,
 })
-function Home() {
-  const { data: posts } = useSuspenseQuery(postsQueryOptions)
 
+function HomePage() {
+  const { user, status } = useAuth()
+  console.log('HomePage user:', user)
   return (
-    <main className="min-h-screen bg-muted/30 px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-4xl space-y-8">
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-2">
-            <Badge variant="secondary">Dashboard</Badge>
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Latest posts
-            </h1>
-            <p className="text-muted-foreground">
-              Stay up to date with the latest published content.
+    <main className="flex min-h-screen items-center justify-center bg-muted/40 px-4 py-12">
+      <Card className="w-full max-w-2xl shadow-sm">
+        <CardHeader>
+          <CardTitle className="text-3xl">
+            TanStack Start × NestJS auth
+          </CardTitle>
+          <CardDescription className="text-base">
+            JWT access token in memory with a refresh-token session in an
+            httpOnly cookie.
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="space-y-6">
+          {/* Session status */}
+          <div className="rounded-lg border bg-background p-4">
+            <p className="text-sm text-muted-foreground">Session status</p>
+
+            <p className="mt-1 font-medium">
+              <code className="rounded bg-muted px-2 py-1 text-sm">
+                {status}
+              </code>
             </p>
           </div>
-          <ModeToggle />
-        </div>
 
-        <Card className="border-0 shadow-sm">
-          <CardHeader>
-            <CardTitle>Recent updates</CardTitle>
-            <CardDescription>
-              A curated selection of the newest posts.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="divide-y">
-              {posts.map((post: { id: number; title: string }) => (
-                <article
-                  key={post.id}
-                  className="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0"
-                >
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium leading-6">
-                      {post.title}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Read the latest update from our team.
-                    </p>
-                  </div>
-                  <Badge variant="outline" className="shrink-0">
-                    #{post.id}
-                  </Badge>
-                </article>
-              ))}
+          {/* User profile */}
+          {user ? (
+            <div className="flex items-center gap-4 rounded-lg border bg-background p-4">
+              {user.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={`${user.name || user.email}'s avatar`}
+                  className="h-14 w-14 rounded-full object-cover"
+                />
+              ) : (
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-semibold text-primary-foreground">
+                  {(user.name || user.email).charAt(0).toUpperCase()}
+                </div>
+              )}
+
+              <div className="min-w-0">
+                <p className="font-semibold">{user.name || 'Signed-in user'}</p>
+                <p className="break-all text-sm text-muted-foreground">
+                  {user.email}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Role: {user.role}
+                </p>
+              </div>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Sign in to view your profile and access the dashboard.
+            </p>
+          )}
+
+          {/* Navigation */}
+          <div className="flex flex-wrap gap-3">
+            {status === 'authenticated' ? (
+              <Link className={buttonVariants()} to="/dashboard">
+                Go to dashboard →
+              </Link>
+            ) : (
+              <Link className={buttonVariants()} to="/login">
+                Sign in →
+              </Link>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </main>
   )
 }
