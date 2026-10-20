@@ -20,13 +20,13 @@ import { TokenService } from './token.service.js';
 import { AuthService } from './auth.service.js';
 import { type SafeAuthUser, toSafeUser } from './lib/index.js';
 import { RegisterDto } from './dtos/regsiter.dto.js';
-import { LocalAuthGuard } from './decorators/local-auth.guard.js';
+import { LocalAuthGuard } from './guards/local-auth.guard.js';
 import { LoginDto } from './dtos/login.dto.js';
 import { CurrentUser } from './decorators/current-user.decorator.js';
 import { AuthEntity } from './entities/auth.entity.js';
 import { RefreshTokenDto } from './dtos/refresh-token.js';
-import { RolesGuard } from './decorators/roles.guard.js';
-import { JwtAuthGuard } from './decorators/jwt-auth.guard.js';
+import { RolesGuard } from './guards/roles.guard.js';
+import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 import { Roles } from './decorators/roles.decorator.js';
 
 const REFRESH_COOKIE = 'refresh_token';
