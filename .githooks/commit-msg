@@ -1,0 +1,30 @@
+#!/bin/sh
+
+commit_msg_file="$1"
+commit_msg=$(head -n 1 "$commit_msg_file")
+
+pattern='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-zA-Z0-9._/-]+\))?!?: .+'
+
+if ! printf '%s\n' "$commit_msg" | grep -Eq "$pattern"; then
+  echo ""
+  echo "❌ Invalid commit message."
+  echo ""
+  echo "Commit messages must follow Conventional Commits:"
+  echo ""
+  echo "  <type>[optional scope]: <description>"
+  echo ""
+  echo "Examples:"
+  echo "  feat: add user authentication"
+  echo "  fix(api): handle invalid token"
+  echo "  docs: update README"
+  echo "  refactor(database): simplify connection"
+  echo "  feat(auth)!: remove legacy authentication"
+  echo ""
+  echo "Allowed types:"
+  echo "  feat, fix, docs, style, refactor, perf,"
+  echo "  test, build, ci, chore, revert"
+  echo ""
+  exit 1
+fi
+
+exit 0
