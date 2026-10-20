@@ -18,7 +18,7 @@ export class AuthEntity extends BaseEntity {
 
   /** Hashed user password, excluded from default queries. */
   @Column({ type: 'varchar', select: false })
-  password!: string;
+  password: string;
 
   /** Optional URL or path to the user's avatar. */
   @Column({
