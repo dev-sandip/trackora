@@ -13,4 +13,5 @@ export default new DataSource({
   migrations: ['src/database/migrations/*{.ts,.js}'],
 
   synchronize: false,
+  logging:true
 });
