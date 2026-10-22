@@ -1,9 +1,13 @@
 import axios, { AxiosError } from 'axios'
 import type {
+  Agent,
   AuthTokensResponse,
+  CreateAgentInput,
+  ListAgentsQuery,
   LoginInput,
   RegisterInput,
   SafeAuthUser,
+  UpdateAgentInput,
 } from './types'
 
 const baseURL = import.meta.env.VITE_SERVER_URL
@@ -127,6 +131,36 @@ export const authApi = {
   },
   me: async (): Promise<SafeAuthUser> =>
     (await api.get<SafeAuthUser>('/auth/me')).data,
+}
+
+export const adminApi = {
+  getAllUsers: async (): Promise<SafeAuthUser[]> =>
+    (await api.get<SafeAuthUser[]>('/auth/all-users')).data,
+
+  listAgents: async (query: ListAgentsQuery = {}): Promise<Agent[]> => {
+    const params = new URLSearchParams()
+    if (query.status) params.set('status', query.status)
+    if (query.isOnline !== undefined) params.set('isOnline', String(query.isOnline))
+    if (query.vehicleType) params.set('vehicleType', query.vehicleType)
+    if (query.isActive !== undefined) params.set('isActive', String(query.isActive))
+    const { data } = await api.get<Agent[]>(`/agent?${params.toString()}`)
+    return data
+  },
+
+  getAgent: async (id: string): Promise<Agent> =>
+    (await api.get<Agent>(`/agent/${id}`)).data,
+
+  createAgent: async (input: CreateAgentInput): Promise<void> => {
+    await api.post('/agent', input)
+  },
+
+  updateAgent: async (id: string, input: UpdateAgentInput): Promise<void> => {
+    await api.patch(`/agent/${id}`, input)
+  },
+
+  deleteAgent: async (id: string): Promise<void> => {
+    await api.delete(`/agent/${id}`)
+  },
 }
 
 export function getApiErrorMessage(

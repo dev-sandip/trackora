@@ -1,91 +1,106 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { useAuth } from '../auth/auth-context'
-import { buttonVariants } from '../components/ui/button'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-} from '../components/ui/card'
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { ShieldCheck, UserPlus } from 'lucide-react'
+import { useAuth } from '../auth/auth-context'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
 })
 
 function HomePage() {
-  const { user, status } = useAuth()
-  console.log('HomePage user:', user)
+  const { user, logout } = useAuth()
+  const router = useRouter()
+
+  const handleSignIn = () => {
+    void router.navigate({ to: '/login' })
+  }
+
+  const handleSignUp = () => {
+    void router.navigate({ to: '/register' })
+  }
+
+  const handleGoToDashboard = () => {
+    void router.navigate({ to: '/dashboard' })
+  }
+
+  const handleGoToAdmin = () => {
+    void router.navigate({ to: '/admin' })
+  }
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+    } catch {}
+    void router.navigate({ to: '/login', replace: true })
+  }
+
   return (
-    <main className="flex min-h-screen items-center justify-center bg-muted/40 px-4 py-12">
-      <Card className="w-full max-w-2xl shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-3xl">
-            TanStack Start × NestJS auth
-          </CardTitle>
-          <CardDescription className="text-base">
-            JWT access token in memory with a refresh-token session in an
-            httpOnly cookie.
+    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center space-y-4">
+          <div className="flex items-center justify-center gap-2">
+            <ShieldCheck className="size-6" />
+            <CardTitle className="text-2xl font-bold tracking-tight">
+              Trackio
+            </CardTitle>
+          </div>
+          <CardDescription>
+            Real-time delivery agent tracking
           </CardDescription>
         </CardHeader>
-
-        <CardContent className="space-y-6">
-          {/* Session status */}
-          <div className="rounded-lg border bg-background p-4">
-            <p className="text-sm text-muted-foreground">Session status</p>
-
-            <p className="mt-1 font-medium">
-              <code className="rounded bg-muted px-2 py-1 text-sm">
-                {status}
-              </code>
-            </p>
-          </div>
-
-          {/* User profile */}
+        <CardContent className="space-y-4 text-center">
           {user ? (
-            <div className="flex items-center gap-4 rounded-lg border bg-background p-4">
-              {user.avatar ? (
-                <img
-                  src={user.avatar}
-                  alt={`${user.name || user.email}'s avatar`}
-                  className="h-14 w-14 rounded-full object-cover"
-                />
-              ) : (
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-semibold text-primary-foreground">
-                  {(user.name || user.email).charAt(0).toUpperCase()}
-                </div>
-              )}
-
-              <div className="min-w-0">
-                <p className="font-semibold">{user.name || 'Signed-in user'}</p>
-                <p className="break-all text-sm text-muted-foreground">
-                  {user.email}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Role: {user.role}
-                </p>
+            <>
+              <div className="flex gap-2 mb-4">
+                {user.role === 'admin' ? (
+                  <Button onClick={handleGoToAdmin} className="flex-1">
+                    Go to Admin Panel →
+                  </Button>
+                ) : (
+                  <Button onClick={handleGoToDashboard} className="flex-1">
+                    Go to Dashboard →
+                  </Button>
+                )}
               </div>
-            </div>
+              <Button
+                onClick={handleLogout}
+                variant="destructive"
+                className="w-full"
+              >
+                Sign out
+              </Button>
+            </>
           ) : (
-            <p className="text-sm text-muted-foreground">
-              Sign in to view your profile and access the dashboard.
+            <>
+              <Button onClick={handleSignIn} className="w-full">
+                Sign in
+              </Button>
+              <Button variant="outline" onClick={handleSignUp} className="w-full">
+                <UserPlus className="mr-2 size-4" /> Create account
+              </Button>
+            </>
+          )}
+        </CardContent>
+        <CardFooter className="text-center">
+          {user ? (
+            <p className="text-xs text-muted-foreground">
+              Logged in as {user.role}
+            </p>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              Delivery agent fleet management for admins and agents.
             </p>
           )}
-
-          {/* Navigation */}
-          <div className="flex flex-wrap gap-3">
-            {status === 'authenticated' ? (
-              <Link className={buttonVariants()} to="/dashboard">
-                Go to dashboard →
-              </Link>
-            ) : (
-              <Link className={buttonVariants()} to="/login">
-                Sign in →
-              </Link>
-            )}
-          </div>
-        </CardContent>
+        </CardFooter>
       </Card>
-    </main>
+    </div>
   )
 }

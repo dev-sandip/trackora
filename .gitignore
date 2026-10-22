@@ -151,3 +151,4 @@ vite.config.ts.timestamp-*
 docs
 scripts/copy-refresh-token-admin.sh
 scripts/copy-refresh-token-agent.sh
+opencode.json

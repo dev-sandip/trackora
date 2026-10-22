@@ -5,18 +5,20 @@ import {
   Check,
   Info,
   LoaderCircle,
-  type LucideIcon,
-  X,
+  
+  X
 } from "lucide-react";
+import type {LucideIcon} from "lucide-react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import {
-  type ReactNode,
+  
   useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
-  useState,
+  useState
 } from "react";
+import type {ReactNode} from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";

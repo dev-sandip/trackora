@@ -1,5 +1,14 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { useAuth } from '../../auth/auth-context'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardPage,
@@ -7,54 +16,100 @@ export const Route = createFileRoute('/dashboard')({
 
 function DashboardPage() {
   const { user, logout, logoutAll, isLoggingOut } = useAuth()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+    } catch {}
+    await router.navigate({ to: '/login', replace: true })
+  }
+
+  const handleLogoutAll = async () => {
+    try {
+      await logoutAll()
+    } catch {}
+    await router.navigate({ to: '/login', replace: true })
+  }
 
   return (
-    <main style={{ maxWidth: 640, margin: '48px auto', padding: '0 16px' }}>
-      <h1 style={{ marginBottom: 4 }}>Dashboard</h1>
-      <p style={{ color: '#64748b' }}>
-        This route is protected by the <code>_protected</code> layout.
-      </p>
+    <div className="min-h-screen bg-background px-4 py-8 sm:px-6 lg:px-8">
+      <div className="max-w-2xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              Dashboard
+            </h1>
+            <p className="text-muted-foreground">
+              Welcome back, {user?.name || 'User'}
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Badge variant="outline">
+              {user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'U'}
+            </Badge>
+          </div>
+        </div>
 
-      {user ? (
-        <ul>
-          <li>Name: {user.name}</li>
-          <li>Email: {user.email}</li>
-          <li>
-            Role: <code>{user.role}</code>
-          </li>
-          <li>
-            Active: <code>{String(user.isActive)}</code>
-          </li>
-        </ul>
-      ) : null}
+        <Card>
+          <CardHeader>
+            <CardTitle>Account</CardTitle>
+            <CardDescription>
+              Manage your account settings and session.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                {(user?.name || user?.email || 'U').charAt(0).toUpperCase()}
+              </div>
+              <div className="space-y-1">
+                <p className="font-medium text-foreground">
+                  {user?.name || 'Signed-in user'}
+                </p>
+                <p className="text-sm text-muted-foreground">{user?.email}</p>
+                <p className="text-xs text-muted-foreground">
+                  Role: {user?.role}
+                </p>
+              </div>
+            </div>
 
-      <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
-        <button
-          onClick={() => void logout()}
-          disabled={isLoggingOut}
-          style={buttonStyle}
-        >
-          {isLoggingOut ? 'Signing out…' : 'Sign out'}
-        </button>
-        <button
-          onClick={() => void logoutAll()}
-          disabled={isLoggingOut}
-          style={buttonStyle}
-        >
-          Sign out of all devices
-        </button>
+            <div className="pt-4 border-t">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Session
+              </p>
+              <div className="mt-2 space-y-2">
+                <Button
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                  variant="destructive"
+                  className="w-full"
+                >
+                  {isLoggingOut ? 'Signing out…' : 'Sign out'}
+                </Button>
+                <Button
+                  onClick={handleLogoutAll}
+                  disabled={isLoggingOut}
+                  variant="outline"
+                  className="w-full"
+                >
+                  Sign out of all devices
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {user?.role === 'admin' && (
+          <div className="mt-8">
+            <Link to="/admin">
+              <Button className="w-full">
+                Go to Admin Panel →
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
-    </main>
+    </div>
   )
-}
-
-const buttonStyle: React.CSSProperties = {
-  padding: '8px 14px',
-  fontSize: 14,
-  fontWeight: 600,
-  color: '#fff',
-  background: '#0f172a',
-  border: 'none',
-  borderRadius: 8,
-  cursor: 'pointer',
 }

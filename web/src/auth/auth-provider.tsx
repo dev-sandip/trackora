@@ -3,7 +3,7 @@ import type { AxiosError } from 'axios'
 import { useCallback, useEffect, useMemo } from 'react'
 import type { ReactNode } from 'react'
 import { authApi, setAccessToken, setSessionExpiredHandler } from '../lib/api'
-import type { AuthTokensResponse, LoginInput, SafeAuthUser } from '../lib/types'
+import type { AuthTokensResponse, LoginInput, RegisterInput, SafeAuthUser } from '../lib/types'
 import { AuthContext } from './auth-context'
 import type { AuthContextValue } from './auth-context'
 import { sessionQueryOptions } from './session.queries'
@@ -43,6 +43,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     mutationFn: () => authApi.logoutAll(),
   })
 
+  const registerMutation = useMutation<SafeAuthUser, AxiosError, RegisterInput>({
+    mutationKey: ['auth', 'register'],
+    mutationFn: (input) => authApi.register(input),
+  })
+
   const login = useCallback(
     async (input: LoginInput): Promise<SafeAuthUser> => {
       const data = await loginMutation.mutateAsync(input)
@@ -72,6 +77,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     clearLocalSession()
   }, [logoutAllMutation, clearLocalSession])
 
+  const register = useCallback(
+    async (input: RegisterInput): Promise<SafeAuthUser> => {
+      const data = await registerMutation.mutateAsync(input)
+      return data
+    },
+    [registerMutation],
+  )
+
   const value = useMemo<AuthContextValue>(
     () => ({
       user: sessionQuery.data ?? null,
@@ -83,6 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       logout,
       logoutAll,
+      register,
       isLoggingIn: loginMutation.isPending,
       isLoggingOut: logoutMutation.isPending || logoutAllMutation.isPending,
       error: loginMutation.error,
@@ -93,6 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       logout,
       logoutAll,
+      register,
       loginMutation.isPending,
       loginMutation.error,
       logoutMutation.isPending,

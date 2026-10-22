@@ -12,7 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminAgentsRouteImport } from './routes/admin/agents'
+import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as DashboardProtectedRouteImport } from './routes/dashboard/_protected'
+import { Route as AdminAgentsAgentIdRouteImport } from './routes/admin/agents/$agentId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,40 +34,110 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAgentsRoute = AdminAgentsRouteImport.update({
+  id: '/admin/agents',
+  path: '/admin/agents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardProtectedRoute = DashboardProtectedRouteImport.update({
   id: '/_protected',
   getParentRoute: () => DashboardRouteRoute,
+} as any)
+const AdminAgentsAgentIdRoute = AdminAgentsAgentIdRouteImport.update({
+  id: '/$agentId',
+  path: '/$agentId',
+  getParentRoute: () => AdminAgentsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/admin/agents': typeof AdminAgentsRouteWithChildren
+  '/admin/users': typeof AdminUsersRoute
+  '/admin/': typeof AdminIndexRoute
+  '/admin/agents/$agentId': typeof AdminAgentsAgentIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/admin/agents': typeof AdminAgentsRouteWithChildren
+  '/admin/users': typeof AdminUsersRoute
+  '/admin': typeof AdminIndexRoute
+  '/admin/agents/$agentId': typeof AdminAgentsAgentIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/admin/agents': typeof AdminAgentsRouteWithChildren
+  '/admin/users': typeof AdminUsersRoute
   '/dashboard/_protected': typeof DashboardProtectedRoute
+  '/admin/': typeof AdminIndexRoute
+  '/admin/agents/$agentId': typeof AdminAgentsAgentIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/login'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/register'
+    | '/admin/agents'
+    | '/admin/users'
+    | '/admin/'
+    | '/admin/agents/$agentId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login'
-  id: '__root__' | '/' | '/dashboard' | '/login' | '/dashboard/_protected'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/register'
+    | '/admin/agents'
+    | '/admin/users'
+    | '/admin'
+    | '/admin/agents/$agentId'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/register'
+    | '/admin/agents'
+    | '/admin/users'
+    | '/dashboard/_protected'
+    | '/admin/'
+    | '/admin/agents/$agentId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
+  AdminAgentsRoute: typeof AdminAgentsRouteWithChildren
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -88,12 +163,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/agents': {
+      id: '/admin/agents'
+      path: '/admin/agents'
+      fullPath: '/admin/agents'
+      preLoaderRoute: typeof AdminAgentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/_protected': {
       id: '/dashboard/_protected'
       path: ''
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardProtectedRouteImport
       parentRoute: typeof DashboardRouteRoute
+    }
+    '/admin/agents/$agentId': {
+      id: '/admin/agents/$agentId'
+      path: '/$agentId'
+      fullPath: '/admin/agents/$agentId'
+      preLoaderRoute: typeof AdminAgentsAgentIdRouteImport
+      parentRoute: typeof AdminAgentsRoute
     }
   }
 }
@@ -110,10 +220,26 @@ const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
   DashboardRouteRouteChildren,
 )
 
+interface AdminAgentsRouteChildren {
+  AdminAgentsAgentIdRoute: typeof AdminAgentsAgentIdRoute
+}
+
+const AdminAgentsRouteChildren: AdminAgentsRouteChildren = {
+  AdminAgentsAgentIdRoute: AdminAgentsAgentIdRoute,
+}
+
+const AdminAgentsRouteWithChildren = AdminAgentsRoute._addFileChildren(
+  AdminAgentsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
+  AdminAgentsRoute: AdminAgentsRouteWithChildren,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

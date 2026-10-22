@@ -10,6 +10,48 @@ export interface SafeAuthUser {
   updatedAt: string
 }
 
+export type AgentStatus = 'offline' | 'available' | 'busy' | 'break' | 'suspended'
+export type VehicleType = 'bike' | 'scooter' | 'car' | 'van'
+
+export interface Agent {
+  id: string
+  userId: string
+  status: AgentStatus
+  isOnline: boolean
+  vehicleType?: VehicleType | null
+  vehiclePlate?: string | null
+  maxConcurrentOrders?: number | null
+  currentOrderId?: string | null
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+  user?: SafeAuthUser
+}
+
+export interface ListAgentsQuery {
+  status?: AgentStatus
+  isOnline?: boolean
+  vehicleType?: VehicleType
+  isActive?: boolean
+}
+
+export interface CreateAgentInput {
+  userId: string
+  vehicleType: VehicleType
+  vehiclePlate: string
+  maxConcurrentOrders: number
+}
+
+export interface UpdateAgentInput {
+  status?: AgentStatus
+  isOnline?: boolean
+  vehicleType?: VehicleType
+  vehiclePlate?: string
+  maxConcurrentOrders?: number
+  currentOrderId?: string | null
+  isActive?: boolean
+}
+
 export interface LoginInput {
   email: string
   password: string
