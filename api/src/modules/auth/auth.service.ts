@@ -11,9 +11,9 @@ import { RegisterDto } from './dtos/regsiter.dto.js';
 import { SafeAuthUser, toSafeUser } from './lib/index.js';
 import { compare, hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
-import { LoginDto } from './dtos/login.dto.js';
 import { AuthTokensResult } from './interfaces/auth-response.interface.js';
 import { TokenService } from './token.service.js';
+import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
 @Injectable()
 export class AuthService {
@@ -174,7 +174,7 @@ export class AuthService {
   }
 
   /** Housekeeping: delete sessions that expired more than `olderThanDays` ago. */
-  async purgeExpiredSessions(olderThanDays = 30): Promise<void> {
+  async purgeExpiredSessions(olderThanDays = 10): Promise<void> {
     const cutoff = new Date(Date.now() - olderThanDays * 24 * 60 * 60 * 1_000);
     await this.authSessionRepository
       .createQueryBuilder()
@@ -200,5 +200,20 @@ export class AuthService {
       accessToken: await this.signAccessToken(session.id, user),
       refreshToken,
     };
+  }
+
+  //Admin Only Services
+
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiOkResponse({
+    description: 'Returns all users without passwords or other sensitive fields.',
+    schema: {
+      type: 'array',
+      items: { type: 'object' },
+    },
+  })
+  async getAllUsers(): Promise<SafeAuthUser[]> {
+    const users = await this.authRepository.find();
+    return users.map(toSafeUser);
   }
 }

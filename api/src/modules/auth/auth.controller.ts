@@ -28,11 +28,23 @@ import { RefreshTokenDto } from './dtos/refresh-token.js';
 import { RolesGuard } from './guards/roles.guard.js';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 import { Roles } from './decorators/roles.decorator.js';
+import {
+  ApiBearerAuth,
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 const REFRESH_COOKIE = 'refresh_token';
 type RefreshTransport = 'both' | 'cookie' | 'body';
 
 @Controller('auth')
+@ApiTags('Auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -42,12 +54,19 @@ export class AuthController {
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiCreatedResponse({ description: 'User registered successfully' })
+  @ApiBadRequestResponse({ description: 'Invalid registration data' })
   async register(@Body() dto: RegisterDto): Promise<SafeAuthUser> {
     return this.authService.register(dto);
   }
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
+  @ApiOperation({ summary: 'Log in and issue authentication tokens' })
+  @ApiOkResponse({ description: 'Authentication tokens issued successfully' })
+  @ApiBadRequestResponse({ description: 'Invalid login data' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   async login(
     @Body() _dto: LoginDto, // present so the global ValidationPipe runs first
     @CurrentUser() user: AuthEntity,
@@ -58,6 +77,12 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @ApiOperation({ summary: 'Refresh authentication tokens' })
+  @ApiOkResponse({
+    description: 'Authentication tokens refreshed successfully',
+  })
+  @ApiBadRequestResponse({ description: 'Refresh token is missing or invalid' })
+  @ApiUnauthorizedResponse({ description: 'Refresh token is unauthorized' })
   async refresh(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
@@ -71,6 +96,10 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Log out the current session' })
+  @ApiNoContentResponse({ description: 'Session logged out successfully' })
+  @ApiUnauthorizedResponse({ description: 'Authentication is required' })
   async logout(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
@@ -88,6 +117,10 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Post('logout-all')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Log out all sessions' })
+  @ApiOkResponse({ description: 'All user sessions revoked successfully' })
+  @ApiUnauthorizedResponse({ description: 'Authentication is required' })
   async logoutAll(
     @CurrentUser() user: AuthEntity,
     @Res({ passthrough: true }) response: Response,
@@ -99,22 +132,25 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get the current user' })
+  @ApiOkResponse({ description: 'Returns the authenticated user' })
+  @ApiUnauthorizedResponse({ description: 'Authentication is required' })
   me(@CurrentUser() user: AuthEntity): SafeAuthUser {
     return toSafeUser(user);
   }
 
-  /** Demo of route-level RBAC — remove or adapt to your feature modules. */
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
-  @Get('admin-dashboard')
-  adminDashboard(@CurrentUser() user: AuthEntity): {
-    message: string;
-    requestedBy: string;
-  } {
-    return { message: 'Welcome, admin.', requestedBy: user.email };
+  @Get('all-users')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'List all users' })
+  @ApiOkResponse({ description: 'Returns all users safe for client exposure' })
+  @ApiUnauthorizedResponse({ description: 'Authentication is required' })
+  @ApiForbiddenResponse({ description: 'Admin role is required' })
+  async getAllUsers(): Promise<SafeAuthUser[]> {
+    return await this.authService.getAllUsers();
   }
-
-  // --- helpers -------------------------------------------------------------
 
   /** Reads the raw refresh token from the httpOnly cookie, else the body. */
   private extractRefreshToken(request: Request, bodyToken?: string): string {

@@ -13,6 +13,7 @@ import { AuthModule } from './modules/auth/auth.module.js';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { LoggerMiddleware } from './common/middleware/logger.middleware.js';
+import { AgentModule } from './modules/agents/agent.module.js';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware.js';
     }),
 
     AuthModule,
+    AgentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

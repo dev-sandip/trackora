@@ -149,3 +149,5 @@ vite.config.ts.timestamp-*
 .turbo
 
 docs
+scripts/copy-refresh-token-admin.sh
+scripts/copy-refresh-token-agent.sh
