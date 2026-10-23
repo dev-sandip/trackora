@@ -1,14 +1,17 @@
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AgentEntity } from './entities/agent.entity.js';
-import { Module } from '@nestjs/common';
-
 import { AgentController } from './agent.controller.js';
 import { AgentService } from './agent.service.js';
+import { OrderModule } from '../orders/order.module.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([AgentEntity])],
+  imports: [
+    TypeOrmModule.forFeature([AgentEntity]),
+    forwardRef(() => OrderModule),
+  ],
   controllers: [AgentController],
   providers: [AgentService],
-  exports: [],
+  exports: [AgentService],
 })
 export class AgentModule {}

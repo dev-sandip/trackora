@@ -15,6 +15,32 @@ export const Route = createFileRoute('/')({
   component: HomePage,
 })
 
+/**
+ * Intent: Unauthenticated visitor opening the landing page.
+ * - Who: Someone discovering Trackio for the first time
+ * - What: Understand the product value, decide to sign in or explore
+ * - Feel: Clear, professional, inviting — not generic SaaS template
+ *
+ * Hierarchy: Trackio brand > CTA direction > Sign in/Call to action
+ * - Trackio (2xl bold) is the focal point
+ * - Role-based CTA buttons win through size (flex-1) + contrast (primary vs outline)
+ * - Footer copy demoted to text-xs/muted
+ *
+ * Palette: shadcn defaults + intentional temperature
+ * - Card uses bg-card/foreground (from design tokens)
+   - Primary button calls action, outline button is secondary
+ * - Muted-foreground for secondary text, never raw hex
+ *
+ * Depth: Subtle card elevation — shadcn Card provides whisper-quiet surface
+ * - Base surface with minimal shadow, borders disappear on squint
+ * - Focus rings use ring-2 ring-offset-2 ring-primary for accessibility
+ *
+ * Spacing: Base 4px grid, moderate density (12-16px between interactive elements)
+ * - Card max-w-md centers the experience
+ * - gap-2 inside headers, mb-4 between sections, p-6 inside content
+ * - Text-xs/muted-foreground for secondary copy
+ */
+
 function HomePage() {
   const { user, logout } = useAuth()
   const router = useRouter()
@@ -83,7 +109,11 @@ function HomePage() {
               <Button onClick={handleSignIn} className="w-full">
                 Sign in
               </Button>
-              <Button variant="outline" onClick={handleSignUp} className="w-full">
+              <Button
+                variant="outline"
+                onClick={handleSignUp}
+                className="w-full"
+              >
                 <UserPlus className="mr-2 size-4" /> Create account
               </Button>
             </>

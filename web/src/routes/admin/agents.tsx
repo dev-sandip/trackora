@@ -2,13 +2,11 @@ import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import {
-  Filter,
   User,
   Bike,
   Scooter,
   Car,
   Van,
-  MoreHorizontal,
   ChevronRight,
 } from 'lucide-react'
 
@@ -251,7 +249,7 @@ function AgentsPage() {
       <main className="flex-1 px-6 py-8 space-y-8">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b pb-4">
           <div>
-            <h2 className="text-lg font-semibold">Agents</h2>
+            <h2 className="text-lg font-semibold tracking-tight">Agents</h2>
             <p className="text-sm text-muted-foreground">
               {filtered.length} of {agents.length} agents
             </p>
@@ -274,39 +272,35 @@ function AgentsPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-          <div className="flex items-center justify-between p-4 rounded-lg border bg-muted/50">
+          <div className="border-b border-border bg-card py-4">
             <div>
-              <p className="text-xs text-muted-foreground">Total</p>
-              <p className="text-sm font-medium">{agents.length}</p>
+              <p className="text-xs font-medium tracking-wider text-muted-foreground">Total</p>
+              <p className="text-2xl font-bold tracking-tight">{agents.length}</p>
             </div>
-            <Filter className="size-4 text-muted-foreground" />
           </div>
-          <div className="flex items-center justify-between p-4 rounded-lg border bg-muted/50">
+          <div className="border-b border-border bg-card py-4">
             <div>
-              <p className="text-xs text-muted-foreground">Online</p>
-              <p className="text-sm font-medium text-green-600 dark:text-green-400">
+              <p className="text-xs font-medium tracking-wider text-muted-foreground">Online</p>
+              <p className="text-2xl font-medium text-green-600 dark:text-green-400">
                 {agents.filter((a) => a.isOnline).length}
               </p>
             </div>
-            <User className="size-4 text-muted-foreground" />
           </div>
-          <div className="flex items-center justify-between p-4 rounded-lg border bg-muted/50">
+          <div className="border-b border-border bg-card py-4">
             <div>
-              <p className="text-xs text-muted-foreground">Offline</p>
-              <p className="text-sm font-medium text-muted-foreground">
+              <p className="text-xs font-medium tracking-wider text-muted-foreground">Offline</p>
+              <p className="text-2xl font-medium text-muted-foreground">
                 {agents.filter((a) => !a.isOnline).length}
               </p>
             </div>
-            <User className="size-4 text-muted-foreground" />
           </div>
-          <div className="flex items-center justify-between p-4 rounded-lg border bg-muted/50">
+          <div className="border-b border-border bg-card py-4">
             <div>
-              <p className="text-xs text-muted-foreground">Suspended</p>
-              <p className="text-sm font-medium text-destructive">
+              <p className="text-xs font-medium tracking-wider text-muted-foreground">Suspended</p>
+              <p className="text-2xl font-medium text-destructive">
                 {agents.filter((a) => a.status === 'suspended').length}
               </p>
             </div>
-            <MoreHorizontal className="size-4 text-muted-foreground" />
           </div>
         </div>
 

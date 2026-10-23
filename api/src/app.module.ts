@@ -14,6 +14,7 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { LoggerMiddleware } from './common/middleware/logger.middleware.js';
 import { AgentModule } from './modules/agents/agent.module.js';
+import { OrderModule } from './modules/orders/order.module.js';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { AgentModule } from './modules/agents/agent.module.js';
 
     AuthModule,
     AgentModule,
+    OrderModule
   ],
   controllers: [AppController],
   providers: [AppService],

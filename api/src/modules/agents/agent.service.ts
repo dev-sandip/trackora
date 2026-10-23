@@ -1,5 +1,7 @@
 import {
   ConflictException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,12 +12,15 @@ import { CreateAgentDto } from './dtos/create-agent.dto.js';
 import { QueryAgentDto } from './dtos/query-agent.dto.js';
 import { UpdateAgentDto } from './dtos/update-agent.dto.js';
 import { UpdateLocationDto } from './dtos/update-location.dto.js';
+import { OrdersGateway } from '../orders/order.gateway.js';
 
 @Injectable()
 export class AgentService {
   constructor(
     @InjectRepository(AgentEntity)
     private readonly agentRepository: Repository<AgentEntity>,
+    @Inject(forwardRef(() => OrdersGateway))
+    private readonly ordersGateway: OrdersGateway,
   ) {}
 
   async create(agent: CreateAgentDto): Promise<AgentEntity> {
@@ -110,7 +115,10 @@ export class AgentService {
       }
     }
 
-    return this.agentRepository.save(agent);
+    await this.agentRepository.save(agent);
+    this.ordersGateway.emitAgentLocation(agent);
+
+    return agent;
   }
 
   async goOnline(userId: string): Promise<AgentEntity> {
@@ -151,24 +159,24 @@ export class AgentService {
   }
 
   async findNearestAvailable(
-      latitude: number,
-      longitude: number,
-      limit = 10,
-    ): Promise<AgentEntity[]> {
-      // Requires PostGIS
-      return this.agentRepository
-        .createQueryBuilder('agent')
-        .where('agent.isOnline = true')
-        .andWhere('agent.status = :status', { status: 'available' })
-        .andWhere('agent.isActive = true')
-        .orderBy(
-          `ST_Distance(
+    latitude: number,
+    longitude: number,
+    limit = 10,
+  ): Promise<AgentEntity[]> {
+    // Requires PostGIS
+    return this.agentRepository
+      .createQueryBuilder('agent')
+      .where('agent.isOnline = true')
+      .andWhere('agent.status = :status', { status: 'available' })
+      .andWhere('agent.isActive = true')
+      .orderBy(
+        `ST_Distance(
             agent.location,
             ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography
           )`,
-        )
-        .setParameters({ lat: latitude, lng: longitude })
-        .limit(limit)
-        .getMany();
-    }
+      )
+      .setParameters({ lat: latitude, lng: longitude })
+      .limit(limit)
+      .getMany();
   }
+}
